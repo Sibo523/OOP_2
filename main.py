@@ -62,7 +62,7 @@ def main():
     # Defining the product as sold
     p3.sold("pass3")
     print()
-
+    //
     print(p3)
 
     # Displaying the image of the post
