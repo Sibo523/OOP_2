@@ -68,10 +68,20 @@ class User(object):
 
     def get_name(self) -> str:
         return self._name
+    def update(self,user):
+        stri = f"{self._name} has a new post"
+        # str = f'{"name":self._name,has a new post}'
+        user._notif.append(stri)
+
+    def notify(self):
+        for notif in self._followers:
+            up =self._followers[notif]
+            self.update(up)
 
     def publish_post(self, typ: str, *data) -> Post:
         p1 = self._factory.generate_post(self, typ, data)
         self._posts.append(p1)
+        self.notify()
         return p1
 
     def print_notifications(self):

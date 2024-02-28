@@ -13,7 +13,6 @@ class ImagePost(Post):
         image = mpimg.imread(self._image)
         plt.imshow(image)
         plt.show()
-
         print("Shows picture")
 
     def __str__(self):
