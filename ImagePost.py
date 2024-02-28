@@ -11,6 +11,7 @@ class ImagePost(Post):
     def display(self):
         plt.title(f"{self._user.get_name()}'s picture")
         image = mpimg.imread(self._image)
+        plt.axis("off")
         plt.imshow(image)
         plt.show()
         print("Shows picture")
