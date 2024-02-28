@@ -16,7 +16,7 @@ class Post:
                 print(f"notification to {self._user.get_name()}: {user.get_name()} commented on your post: {comment}")
                 self._user.add_notif(f"{user.get_name()} commented on your post")
             return True
-        return False
+        raise Exception('user not logged in')
 
     def like(self, user):
         if user.is_logged():

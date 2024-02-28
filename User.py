@@ -1,6 +1,6 @@
 from Post import Post
 from PostFactory import PostFactory
-
+from FollowObserver import FollowObserver
 
 class User(object):
 
@@ -15,7 +15,8 @@ class User(object):
         self._notif = []
         self._posts = []
         self._logged = True
-
+        self.observer = FollowObserver(self)
+        self.following_obs = {}
     def __str__(self):
         return (f"User name: {self._name}, Number of posts:"
                 f" {len(self._posts)}, Number of followers: {len(self._followers.keys())}")
@@ -24,7 +25,7 @@ class User(object):
     def check_password(self, password: str) -> bool:
         if password == self._password:
             return True
-        return False
+
 
     # Log user in
     def log_in(self, password) -> bool:
@@ -48,10 +49,12 @@ class User(object):
         if self._logged:
             if foll._name not in self._following:
                 self._following[foll._name] = foll
+                foll.following_obs[self._name] = self.observer
                 foll._followers[self._name] = self
                 print(f"{self._name} started following {foll._name}")
                 return True
-        return False
+            raise Exception ("he doesn't follow")
+        raise Exception("Not logged in")
 
     # Unfollow other users
     def unfollow(self, foll: 'User') -> bool:
@@ -59,24 +62,21 @@ class User(object):
             if foll._name in self._following:
                 del self._following[foll._name]
                 del foll._followers[self._name]
+                del foll.following_obs [self._name]
                 print(f"{self._name} unfollowed {foll._name}")
                 return True
-        return False
+        raise Exception("not logged in")
 
     def add_notif(self, notif: str) -> None:
         self._notif.append(notif)
 
     def get_name(self) -> str:
         return self._name
-    def update(self,user):
-        stri = f"{self._name} has a new post"
-        # str = f'{"name":self._name,has a new post}'
-        user._notif.append(stri)
 
     def notify(self):
         for notif in self._followers:
-            up =self._followers[notif]
-            self.update(up)
+            up =self.following_obs[notif]
+            up.update(self)
 
     def publish_post(self, typ: str, *data) -> Post:
         p1 = self._factory.generate_post(self, typ, data)
